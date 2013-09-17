@@ -15,7 +15,7 @@ Examples
 --------
 
 ```js
-app.use(stylish({
+app.use(lessish({
     src: __dirname + '/public',
     compress: true,
 }))
@@ -36,7 +36,7 @@ app.use(lessish({
 For production use, turn caching on (this caches the computed css in memory and disables file watching):
 
 ```js
-app.use(stylish({
+app.use(lessish({
     src:__dirname + '/public',
     compress: true,
     cache: true
