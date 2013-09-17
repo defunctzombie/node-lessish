@@ -1,4 +1,4 @@
-var stylus = require('stylus')
+var less = require('less')
 
 var url = require('url')
 var path = require('path')
@@ -18,7 +18,7 @@ module.exports = function(options) {
                 getCss(stylusPath, urlPath, function(error) {
                     watchCallback && watchCallback(error, urlPath)
                 })
-                watchers.forEach(function(watcher) { 
+                watchers.forEach(function(watcher) {
                     watcher.close()
                 })
             })
@@ -32,27 +32,42 @@ module.exports = function(options) {
             if (error) {
                 return callback(error)
             }
-            var stylusOptions = {
-                filename:stylusPath,
-                compress:options.compress,
-                linenos:options.linenos
+
+            var lessOptions = {
+                filename: stylusPath,
+                optimization: options.optimization,
+                dumpLineNumbers: options.dumpLineNumbers,
+                relativeUrls: options.relativeUrls
             }
+
+            var parser = new less.Parser(lessOptions)
+
             if (watch) {
-                stylusOptions._imports = [{path:stylusPath}]
+                lessOptions._imports = [{path:stylusPath}]
             }
-            var renderer = stylus(stylusSource, stylusOptions)
-            if (options.setup) {
-                renderer = options.setup(renderer, stylusSource, stylusPath)
-            }
-            renderer.render(function(error, css) {
-                if (error) {
-                    return callback(error)
+
+            parser.parse(stylusSource, function(err, tree) {
+                if(err) {
+                    return callback(err)
                 }
+
                 if (watch) {
-                    watchForChanges(stylusOptions._imports, stylusPath, urlPath)
+                    watchForChanges(lessOptions._imports, stylusPath, urlPath)
                 }
-                cache[stylusPath] = css
-                callback(null, css)
+
+                try {
+                    var css = tree.toCSS({
+                        compress: options.compress,
+                        yuicompress: options.yuicompress
+                    })
+
+                    // cache
+                    cache[stylusPath] = css
+
+                    callback(err, css)
+                } catch(parseError) {
+                    callback(parseError, null)
+                }
             })
         })
     }
@@ -61,10 +76,10 @@ module.exports = function(options) {
             return next()
         }
         var urlPath = url.parse(request.url).pathname
-        if (!/\.(css|styl)$/.test(urlPath)) {
+        if (!/\.(css|less)$/.test(urlPath)) {
             return next()
         }
-        var stylusPath = path.normalize(path.join(src, urlPath.replace(/\.css$/, '.styl')))
+        var stylusPath = path.normalize(path.join(src, urlPath.replace(/\.css$/, '.less')))
 
         // prevent access outside of src dir
         if (stylusPath.indexOf(src) !== 0) {

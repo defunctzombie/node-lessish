@@ -1,28 +1,26 @@
 {
-  "author": "Marcello Bastéa-Forte",
-  "name": "stylish",
-  "version": "0.3.0",
-  "description": "Stylus middleware for connect",
+  "author": "Roman Shtylman <shtylman@gmail.com>",
+  "name": "lessish",
+  "version": "0.0.1",
+  "description": "Less middleware for connect",
   "main": "index.js",
   "scripts": {
-      "test":"tap test/*"
+      "test":"mocha --ui tdd --reporter list test/*.js"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/marcello3d/node-stylish.git"
+    "url": "git://github.com/shtylman/node-lessish.git"
   },
   "dependencies": {
-      "stylus":"0.32.1"
+      "less":"1.4.2"
   },
   "devDependencies": {
-      "tap":"0.4.0",
-      "tape":"0.3.0",
-      "connect": "2.7.3",
+      "mocha":"1.13.0",
       "supertest":"0.5.1",
       "express": "3.1.0"
   },
   "keywords": [
-    "stylus",
+    "less",
     "middleware",
     "connect"
   ],

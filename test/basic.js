@@ -1,39 +1,33 @@
-var test = require('tape')
+var assert = require('assert')
 
-var http = require('http')
 var express = require('express')
 var request = require('supertest')
 
-var stylish = require('../.')
+var lessish = require('../')
 
 var app = express()
 var server
 
-test('setup', function(t) {
-    app.use(stylish({
+test('setup', function(done) {
+    app.use(lessish({
         src:__dirname + '/assets',
         cache:true,
         compress:true
     }))
-    server = http.createServer(app)
-    server.listen(function() {
-        t.end()
-    })
-});
+    server = app.listen(done)
+})
 
-test('basic', function(t) {
-    request(server)
+test('basic', function(done) {
+    request(app)
         .get('/test.css')
         .end(function(err, res) {
-            t.equal(res.statusCode, 200)
-            t.equal(res.headers['content-type'], 'text/css')
-            t.equal(res.text, '.foo{color:#f00;}\n.foo .bar{border-radius:10px}\n')
-            t.end()
+            assert.equal(res.statusCode, 200)
+            assert.equal(res.headers['content-type'], 'text/css')
+            assert.equal(res.text, '.foo{color:red}.foo .bar{border-radius:10px}\n')
+            done()
         })
 })
 
-test('shutdown', function(t) {
-    server.close(function() {
-        t.end()
-    })
+test('shutdown', function(done) {
+    server.close(done)
 })
