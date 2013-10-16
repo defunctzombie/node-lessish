@@ -1,4 +1,4 @@
-lessish [![build status](https://secure.travis-ci.org/shtylman/node-lessish.png)](http://travis-ci.org/shtylman/node-lessish)
+lessish [![build status](https://secure.travis-ci.org/defunctzombie/node-lessish.png)](http://travis-ci.org/defunctzombie/node-lessish)
 ============
 
 Simple node.js [lesscss](stylus) middleware for 
