@@ -12,7 +12,7 @@
     "url": "git://github.com/shtylman/node-lessish.git"
   },
   "dependencies": {
-      "less":"1.4.2"
+      "less":"1.5.1"
   },
   "devDependencies": {
       "mocha":"1.13.0",
