@@ -23,7 +23,7 @@ test('basic', function(done) {
         .end(function(err, res) {
             assert.equal(res.statusCode, 200)
             assert.equal(res.headers['content-type'], 'text/css')
-            assert.equal(res.text, '.foo{color:red}.foo .bar{border-radius:10px}\n')
+            assert.equal(res.text, '.foo{color:red}.foo .bar{border-radius:10px}')
             done()
         })
 })
